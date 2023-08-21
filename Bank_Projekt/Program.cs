@@ -9,7 +9,7 @@
         customer1.Adress = "Bahnhofstraße";
         customer1.Adressnumber = 5;
 
-        Console.WriteLine(customer1);
+        Console.WriteLine(customer1.Customerdata);
     }
 }
 
@@ -20,5 +20,12 @@ class Customer
     public int Age { get; set; }
     public string Adress { get; set; } = string.Empty;
     public int Adressnumber { get; set; }
+    public string Customerdata
+    {
+        get
+        {
+            return String.Format("{0} {1} {2} {3} {4}", this.Firstname, this.Lastname, this.Age, this.Adress, this.Adressnumber); 
+        }
+    }
 
 }
