@@ -77,7 +77,7 @@
         {
             get
             {
-                return String.Format("{0} {1} {2} {3} {4}", this.Firstname, this.Lastname, this.Age, this.Adress, this.Adressnumber);
+                return String.Format("Vorname: {0} - Nachname: {1} - Alter: {2} - Adresse: {3} - Hausnummer: {4}", this.Firstname, this.Lastname, this.Age, this.Adress, this.Adressnumber);
             }
         }
 
