@@ -1,15 +1,26 @@
-﻿internal class Program
-{
-    private static void Main(string[] args)
-    {
-        Customer customer1 = new Customer();
-        customer1.Firstname = "Bernd";
-        customer1.Lastname = "Dovic";
-        customer1.Age = 30;
-        customer1.Adress = "Bahnhofstraße";
-        customer1.Adressnumber = 5;
+﻿using System.Numerics;
+using System.Text;
 
-        Console.WriteLine(customer1.Customerdata);
+bool running = true;
+while (running)
+{
+    Console.WriteLine("Was möchtest du tun?");
+    Console.WriteLine("1 - Liste aller Kunden");
+    Console.WriteLine("Q - Beenden");
+
+    string choice = Console.ReadLine().ToUpper();
+
+    switch (choice)
+    {
+        case "1":
+            Console.WriteLine("In Bearbeitung.");
+            break;
+        case "Q":
+            running = false;
+            break;
+        default:
+            Console.WriteLine("Ungültige Auswahl.");
+            break;
     }
 }
 
@@ -24,8 +35,15 @@ class Customer
     {
         get
         {
-            return String.Format("{0} {1} {2} {3} {4}", this.Firstname, this.Lastname, this.Age, this.Adress, this.Adressnumber); 
+            return String.Format("{0} {1} {2} {3} {4}", this.Firstname, this.Lastname, this.Age, this.Adress, this.Adressnumber);
         }
     }
 
 }
+//class Account
+//{
+//    public Account(, int balance)
+//    {
+    
+//    }
+//}
