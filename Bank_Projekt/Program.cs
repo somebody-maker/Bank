@@ -8,19 +8,18 @@
         while (running)
         {
             Console.WriteLine("Was möchtest du tun?");
-            Console.WriteLine("1 - Liste aller Kunden");
-            Console.WriteLine("2 - Hinzufügen eines Kunden");
+            Console.WriteLine("L - Liste aller Kunden");
+            Console.WriteLine("N - Hinzufügen eines Kunden");
             Console.WriteLine("Q - Beenden");
 
             string choice = Console.ReadLine().ToUpper();
 
             switch (choice)
             {
-                case "1":
+                case "L":
                     ListCustomers();
                     break;
-                case "2":
-                    
+                case "N":
                     AddCustomer();
                     break;
                 case "Q":
@@ -46,23 +45,51 @@
     static void AddCustomer() 
     {
         Customer customer = new Customer();
-    //Baustelle: Funktionalität - Hinzufügen der Klasseneigenschaften
+    //Baustelle: Funktionalität - Hinzufügen der Klasseneigenschaften --Implementiert
         Console.WriteLine("Vorname des Kunden: ");
         customer.Firstname = Console.ReadLine();
 
         Console.WriteLine("Nachname des Kunden: ");
         customer.Lastname = Console.ReadLine();
 
+        //Ersetzen durch TryParse - Errorhandling. Program crasht bei Rückgabe von str (Kann nur Zahlen in int wandeln) --Implementiert
         Console.WriteLine("Alter des Kunden: ");
-        customer.Age = int.Parse(Console.ReadLine());
+        int age;
+        bool validage = false;
+        while (!validage)
+        {
+            if (int.TryParse(Console.ReadLine(), out age))
+            {
+                customer.Age = age;
+                validage = true;
+            }
+            else
+            {
+                Console.WriteLine("Ungültige Eingabe, ich brauche eine Zahl.");
+            }
+        }
 
         Console.WriteLine("Straße des Kunden: ");
         customer.Adress = Console.ReadLine();
 
+        //Ersetzen durch TryParse - Errorhandling. Program crasht bei Rückgabe von str (Kann nur Zahlen in int wandeln) --Implementiert
         Console.WriteLine("Hausnummer des Kunden: ");
-        customer.Adressnumber = int.Parse(Console.ReadLine());
+        int housenumber;
+        bool validhouse = false;
+        while (!validhouse)
+        {
+            if (int.TryParse(Console.ReadLine(), out housenumber))
+            {
+                customer.Adressnumber = housenumber;
+                validhouse = true;
+            }
+            else
+            {
+                Console.WriteLine("Ungültige Eingabe, ich brauche eine Zahl.");
+            }
+        }
 
-        //Baustelle: Hinzufügen zur Liste
+    //Baustelle: Hinzufügen zur Liste --Implementiert
         customers.Add(customer);
     }
 
