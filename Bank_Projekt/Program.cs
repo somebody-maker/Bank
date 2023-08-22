@@ -3,7 +3,7 @@
 class Program
 {
     static List<Customer> customers = new List<Customer>();
-    static string dataPath = "customers.json";
+    static string dataPath = "customers.json"; //TO DO: Json File beim Neustart der Anwendung in die Liste laden.
 
     static void Main(string[] args)
     {
@@ -13,6 +13,7 @@ class Program
             Console.WriteLine("Was möchtest du tun?");
             Console.WriteLine("L - Liste aller Kunden");
             Console.WriteLine("N - Hinzufügen eines Kunden");
+            //Console.WriteLine("A - Hinzufügen eines Accounts"); //TO DO: Zuordnung eines Accounts zu existierenden Kunden
             Console.WriteLine("Q - Beenden");
 
             string choice = Console.ReadLine().ToUpper();
@@ -20,9 +21,11 @@ class Program
             switch (choice)
             {
                 case "L":
+                    LoadCustomers();
                     ListCustomers();
                     break;
                 case "N":
+                    LoadCustomers();
                     AddCustomer();
                     break;
                 case "Q":
@@ -100,17 +103,33 @@ class Program
             }
         }
 
-    //Baustelle: Hinzufügen zur Liste --Implementiert
+    //TO DO: Hinzufügen zur Liste --Implementiert
         customers.Add(customer);
     }
 
 
 
-    //----------------------------------------------------------SAVE CUSTOMER METHODE---------------------------------------------------------------------------
-    static void SaveCustomers()
+    //----------------------------------------------------------SAVE CUSTOMERS METHODE---------------------------------------------------------------------------
+    static void SaveCustomers() 
     {
-        string json = JsonSerializer.Serialize(customers, new JsonSerializerOptions { WriteIndented = true });
+        var json = JsonSerializer.Serialize(customers, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(dataPath, json);
+    }
+
+
+
+    //----------------------------------------------------------LOAD CUSTOMERS METHODE---------------------------------------------------------------------------
+    static void LoadCustomers()
+    {
+        if (File.Exists(dataPath))
+        {
+            string json = File.ReadAllText(dataPath);
+            customers = JsonSerializer.Deserialize<List<Customer>>(json);
+        }
+    else
+        {
+            Console.WriteLine("Der angegebene Pfad ist falsch oder es existiert keine Json Datei.");
+        }
     }
 
 
