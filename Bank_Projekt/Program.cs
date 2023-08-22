@@ -1,6 +1,9 @@
-﻿class Program
+﻿using System.Text.Json;
+
+class Program
 {
     static List<Customer> customers = new List<Customer>();
+    static string dataPath = "customers.json";
 
     static void Main(string[] args)
     {
@@ -23,6 +26,7 @@
                     AddCustomer();
                     break;
                 case "Q":
+                    SaveCustomers();
                     running = false;
                     break;
                 default:
@@ -62,13 +66,13 @@
     //Ersetzen durch TryParse - Errorhandling. Program crasht bei Rückgabe von str (Kann nur Zahlen in int wandeln) --Implementiert
         Console.WriteLine("Alter des Kunden: ");
         int age;
-        bool validage = false;
-        while (!validage)
+        bool validAge = false;
+        while (!validAge)
         {
             if (int.TryParse(Console.ReadLine(), out age))
             {
                 customer.Age = age;
-                validage = true;
+                validAge = true;
             }
             else
             {
@@ -81,14 +85,14 @@
 
     //Ersetzen durch TryParse - Errorhandling. Program crasht bei Rückgabe von str (Kann nur Zahlen in int wandeln) --Implementiert
         Console.WriteLine("Hausnummer des Kunden: ");
-        int housenumber;
-        bool validhouse = false;
-        while (!validhouse)
+        int houseNumber;
+        bool validHouse = false;
+        while (!validHouse)
         {
-            if (int.TryParse(Console.ReadLine(), out housenumber))
+            if (int.TryParse(Console.ReadLine(), out houseNumber))
             {
-                customer.Adressnumber = housenumber;
-                validhouse = true;
+                customer.Adressnumber = houseNumber;
+                validHouse = true;
             }
             else
             {
@@ -102,7 +106,16 @@
 
 
 
-    //----------------------------------------------------------CLASS CUSTOMER---------------------------------------------------------------------------
+    //----------------------------------------------------------SAVE CUSTOMER METHODE---------------------------------------------------------------------------
+    static void SaveCustomers()
+    {
+        string json = JsonSerializer.Serialize(customers, new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(dataPath, json);
+    }
+
+
+
+    //----------------------------------------------------------CLASS CUSTOMER---------------------------------------------------------------------------------
     class Customer
     {
         public string Firstname { get; set; } = string.Empty;
