@@ -32,6 +32,10 @@
         }
     }
 
+
+
+
+    //----------------------------------------------------------LIST CUSTOMER METHODE---------------------------------------------------------------------------
     static void ListCustomers()
     {   
     //Anzeigen der Kundendaten (Listenobjekt) 
@@ -42,6 +46,9 @@
         }
     }
 
+
+
+    //----------------------------------------------------------ADD CUSTOMER METHODE---------------------------------------------------------------------------
     static void AddCustomer() 
     {
         Customer customer = new Customer();
@@ -52,7 +59,7 @@
         Console.WriteLine("Nachname des Kunden: ");
         customer.Lastname = Console.ReadLine();
 
-        //Ersetzen durch TryParse - Errorhandling. Program crasht bei Rückgabe von str (Kann nur Zahlen in int wandeln) --Implementiert
+    //Ersetzen durch TryParse - Errorhandling. Program crasht bei Rückgabe von str (Kann nur Zahlen in int wandeln) --Implementiert
         Console.WriteLine("Alter des Kunden: ");
         int age;
         bool validage = false;
@@ -72,7 +79,7 @@
         Console.WriteLine("Straße des Kunden: ");
         customer.Adress = Console.ReadLine();
 
-        //Ersetzen durch TryParse - Errorhandling. Program crasht bei Rückgabe von str (Kann nur Zahlen in int wandeln) --Implementiert
+    //Ersetzen durch TryParse - Errorhandling. Program crasht bei Rückgabe von str (Kann nur Zahlen in int wandeln) --Implementiert
         Console.WriteLine("Hausnummer des Kunden: ");
         int housenumber;
         bool validhouse = false;
@@ -93,6 +100,9 @@
         customers.Add(customer);
     }
 
+
+
+    //----------------------------------------------------------CLASS CUSTOMER---------------------------------------------------------------------------
     class Customer
     {
         public string Firstname { get; set; } = string.Empty;
