@@ -31,7 +31,7 @@ class Customer
     }
 
     //----------------------------------------------------------ADD CUSTOMER METHODE---------------------------------------------------------------------------
-    public static void AddCustomer(List<Customer> customers, int lastCustomerId)
+    public static void AddCustomer(List<Customer> customers, ref int lastCustomerId)
     {
         Customer customer = new Customer();
         lastCustomerId++;

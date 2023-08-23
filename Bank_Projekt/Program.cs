@@ -4,13 +4,13 @@ using System.Text.Json;
 
 class Program
 {
-    public static int lastCustomerId = 0;
     public static List<Customer> customers = new List<Customer>();
     public static string dataPath = "customers.json";
-    public static string idPath = "id.json";
+    public static string idPath = "lastCustomerId.json";
+    public static int lastCustomerId = 0;
     static void Main(string[] args)
     {
-        CustomerData.LoadCustomers(dataPath, idPath, customers, lastCustomerId);
+        CustomerData.LoadCustomers(dataPath, idPath, ref customers, ref lastCustomerId);
         bool running = true;
         while (running)
         {
@@ -25,7 +25,7 @@ class Program
                         _ = args.Length - 1;
                         break;
                     case "add":
-                        Customer.AddCustomer(customers, lastCustomerId);
+                        Customer.AddCustomer(customers, ref lastCustomerId);
                         break;
                     case "quit":
                         running = false;
@@ -51,7 +51,7 @@ class Program
                         Customer.ListCustomers(customers);
                         break;
                     case "N":
-                        Customer.AddCustomer(customers, lastCustomerId);
+                        Customer.AddCustomer(customers, ref lastCustomerId);
                         break;
                     case "A":
                         Customer.AddAccountForCustomer(customers);

@@ -17,7 +17,7 @@ public static void SaveCustomers(string dataPath, string idPath, List<Customer> 
 
 
     //----------------------------------------------------------LOAD CUSTOMERS METHODE---------------------------------------------------------------------------
-    public static void LoadCustomers(string dataPath, string idPath, List<Customer> customers, int lastCustomerId)
+    public static void LoadCustomers(string dataPath, string idPath, ref List<Customer> customers, ref int lastCustomerId)
     {
         if (File.Exists(dataPath))
         {
