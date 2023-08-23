@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.ComponentModel.Design;
+using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text.Json;
 
@@ -14,32 +15,55 @@ class Program
         bool running = true;
         while (running)
         {
-            Console.WriteLine("Was möchtest du tun?");
-            Console.WriteLine("L - Liste aller Kunden");
-            Console.WriteLine("N - Hinzufügen eines Kunden");
-            Console.WriteLine("A - Hinzufügen eines Kundenkontos"); //TO DO: Zuordnung eines Accounts zu existierenden Kunden
-            Console.WriteLine("Q - Beenden");
-
-            string choice = Console.ReadLine().ToUpper();
-
-            switch (choice)
+            if (args.Length > 0)
             {
-                case "L":
-                    ListCustomers();
-                    break;
-                case "N":
-                    AddCustomer();
-                    break;
-                case "A":
-                    AddAccountForCustomer();
-                    break;
-                case "Q":
-                    SaveCustomers();
-                    running = false;
-                    break;
-                default:
-                    Console.WriteLine("Ungültige Auswahl.");
-                    break;
+                string option = args[0];
+
+                switch (option.ToLower())
+                {
+                    case "list":
+                        ListCustomers();
+                        break;
+                    case "add":
+                        AddCustomer();
+                        break;
+                    case "quit":
+                        running = false;
+                        break;
+                    default:
+                        Console.WriteLine("Ungültige Option. Wähle aus zwischen list, add oder quit");
+                        break;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Was möchtest du tun?");
+                Console.WriteLine("L - Liste aller Kunden");
+                Console.WriteLine("N - Hinzufügen eines Kunden");
+                Console.WriteLine("A - Hinzufügen eines Kundenkontos"); //TO DO: Zuordnung eines Accounts zu existierenden Kunden
+                Console.WriteLine("Q - Beenden");
+
+                string choice = Console.ReadLine().ToUpper();
+
+                switch (choice)
+                {
+                    case "L":
+                        ListCustomers();
+                        break;
+                    case "N":
+                        AddCustomer();
+                        break;
+                    case "A":
+                        AddAccountForCustomer();
+                        break;
+                    case "Q":
+                        SaveCustomers();
+                        running = false;
+                        break;
+                    default:
+                        Console.WriteLine("Ungültige Auswahl.");
+                        break;
+                }
             }
         }
     }
