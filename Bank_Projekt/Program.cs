@@ -1,19 +1,23 @@
-﻿using System.Text.Json;
+﻿using System.Security.Cryptography;
+using System.Security.Principal;
+using System.Text.Json;
 
 class Program
 {
+    static int lastCustomerId = 0;
     static List<Customer> customers = new List<Customer>();
     static string dataPath = "customers.json"; //TO DO: Json File beim Neustart der Anwendung in die Liste laden.
-
+    static string idPath = "id.json";
     static void Main(string[] args)
     {
+        LoadCustomers();
         bool running = true;
         while (running)
         {
             Console.WriteLine("Was möchtest du tun?");
             Console.WriteLine("L - Liste aller Kunden");
             Console.WriteLine("N - Hinzufügen eines Kunden");
-            //Console.WriteLine("A - Hinzufügen eines Accounts"); //TO DO: Zuordnung eines Accounts zu existierenden Kunden
+            Console.WriteLine("A - Hinzufügen eines Kundenkontos"); //TO DO: Zuordnung eines Accounts zu existierenden Kunden
             Console.WriteLine("Q - Beenden");
 
             string choice = Console.ReadLine().ToUpper();
@@ -21,12 +25,13 @@ class Program
             switch (choice)
             {
                 case "L":
-                    LoadCustomers();
                     ListCustomers();
                     break;
                 case "N":
-                    LoadCustomers();
                     AddCustomer();
+                    break;
+                case "A":
+                    AddAccountForCustomer();
                     break;
                 case "Q":
                     SaveCustomers();
@@ -46,7 +51,7 @@ class Program
     static void ListCustomers()
     {   
     //Anzeigen der Kundendaten (Listenobjekt) 
-        Console.WriteLine("Kundenliste:");
+        Console.WriteLine("Kundenliste: ");
         foreach (Customer customer in customers)
         {
             Console.WriteLine(customer.Customerdata);
@@ -59,7 +64,10 @@ class Program
     static void AddCustomer() 
     {
         Customer customer = new Customer();
-    //Baustelle: Funktionalität - Hinzufügen der Klasseneigenschaften --Implementiert
+        //Baustelle: Funktionalität - Hinzufügen der Klasseneigenschaften --Implementiert
+        lastCustomerId++;
+        customer.Id = lastCustomerId;
+
         Console.WriteLine("Vorname des Kunden: ");
         customer.Firstname = Console.ReadLine();
 
@@ -114,6 +122,9 @@ class Program
     {
         var json = JsonSerializer.Serialize(customers, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(dataPath, json);
+
+        string idJson = JsonSerializer.Serialize(lastCustomerId);
+        File.WriteAllText(idPath, idJson);
     }
 
 
@@ -125,6 +136,12 @@ class Program
         {
             string json = File.ReadAllText(dataPath);
             customers = JsonSerializer.Deserialize<List<Customer>>(json);
+
+            if (File.Exists(idPath))
+            {
+                string idJson = File.ReadAllText(idPath);
+                lastCustomerId = JsonSerializer.Deserialize<int>(idJson);
+            }
         }
     else
         {
@@ -134,28 +151,56 @@ class Program
 
 
 
+    //----------------------------------------------------------ADD ACCOUNT METHODE---------------------------------------------------------------------------------
+    static void AddAccountForCustomer()
+    {
+        Console.WriteLine("ID des Kunden: ");
+        if (int.TryParse(Console.ReadLine(), out int customerId))
+        {
+            Customer customer = customers.Find(c => c.Id == customerId)!;
+            if (customer != null)
+            {
+                Account account = new Account();
+                account.AccountNumber = RandomNumberGenerator.GetInt32(1, 200);
+                customer.Accounts.Add(account);
+                Console.WriteLine("Konto erfolgreich hinzugefügt.");
+                SaveCustomers();
+            }
+            else
+            {
+                Console.WriteLine("Es gibt keinen Kunden mit der ID.");
+            }
+        }
+    }
+
+
+
+
     //----------------------------------------------------------CLASS CUSTOMER---------------------------------------------------------------------------------
     class Customer
     {
+        public int Id { get; set; }
         public string Firstname { get; set; } = string.Empty;
         public string Lastname { get; set; } = string.Empty;
         public int Age { get; set; }
         public string Adress { get; set; } = string.Empty;
         public int Adressnumber { get; set; }
+        public List<Account> Accounts { get; set; } = new List<Account>();
         public string Customerdata
         {
             get
             {
-                return String.Format("Vorname: {0} - Nachname: {1} - Alter: {2} - Adresse: {3} - Hausnummer: {4}", this.Firstname, this.Lastname, this.Age, this.Adress, this.Adressnumber);
+                string accountsInfo = string.Join(", ", Accounts.Select(account => $"Konto: {account.AccountNumber} - Kontostand: {account.Balance}"));
+                return String.Format("ID: {0} - Vorname: {1} - Nachname: {2} - Alter: {3} - Adresse: {4} - Hausnummer: {5} - Konten: {6}", this.Id, this.Firstname, this.Lastname, this.Age, this.Adress, this.Adressnumber, accountsInfo);
             }
         }
 
     }
-}
-//class Account
-//{
-//    public Account(, int balance)
-//    {
 
-//    }
-//}
+    class Account
+    {
+        public int AccountNumber { get; set; }
+
+        public float Balance { get; set; }
+    }
+}
