@@ -5,30 +5,21 @@ class CustomerData
 {
 
     //----------------------------------------------------------LOAD CUSTOMERS METHODE---------------------------------------------------------------------------
-public static void SaveCustomers(string dataPath, string idPath, List<Customer> customers, int lastCustomerId)
+public static void SaveCustomers(string dataPath, List<Customer> customers)
     {
         var json = JsonSerializer.Serialize(customers, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(dataPath, json);
-
-        string idJson = JsonSerializer.Serialize(lastCustomerId);
-        File.WriteAllText(idPath, idJson);
     }
 
 
 
     //----------------------------------------------------------LOAD CUSTOMERS METHODE---------------------------------------------------------------------------
-    public static void LoadCustomers(string dataPath, string idPath, ref List<Customer> customers, ref int lastCustomerId)
+    public static void LoadCustomers(string dataPath, ref List<Customer> customers)
     {
         if (File.Exists(dataPath))
         {
             string json = File.ReadAllText(dataPath);
-            customers = JsonSerializer.Deserialize<List<Customer>>(json);
-
-            if (File.Exists(idPath))
-            {
-                string idJson = File.ReadAllText(idPath);
-                lastCustomerId = JsonSerializer.Deserialize<int>(idJson);
-            }
+            customers = JsonSerializer.Deserialize<List<Customer>>(json)!;
         }
         else
         {

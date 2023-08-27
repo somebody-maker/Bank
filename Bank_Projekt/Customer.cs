@@ -41,11 +41,18 @@ class Customer
     }
 
     //----------------------------------------------------------ADD CUSTOMER METHODE---------------------------------------------------------------------------
-    public static void AddCustomer(List<Customer> customers, ref int lastCustomerId)
+    public static void AddCustomer(List<Customer> customers)
     {
         Customer customer = new Customer();
-        lastCustomerId++;
-        customer.Id = lastCustomerId;
+        if (customers > 0) 
+        {
+            var lastCustomerId = customer.Max(customer => customer.Id);
+            customer.Id = lastCustomerId + 1;
+        }
+        else 
+        {
+            customer.Id = 1;
+        }
 
         Console.WriteLine("Vorname des Kunden: ");
         customer.Firstname = Console.ReadLine();

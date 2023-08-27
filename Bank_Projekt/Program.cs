@@ -10,7 +10,7 @@ class Program
     public static int lastCustomerId = 0;
     static void Main(string[] args)
     {
-        CustomerData.LoadCustomers(dataPath, idPath, ref customers, ref lastCustomerId);
+        CustomerData.LoadCustomers(dataPath, ref customers);
         bool running = true;
         while (running)
         {
@@ -25,7 +25,7 @@ class Program
                         _ = args.Length - 1;
                         break;
                     case "add":
-                        Customer.AddCustomer(customers, ref lastCustomerId);
+                        Customer.AddCustomer(customers);
                         break;
                     case "quit":
                         running = false;
@@ -51,13 +51,13 @@ class Program
                         Customer.ListCustomers(customers);
                         break;
                     case "N":
-                        Customer.AddCustomer(customers, ref lastCustomerId);
+                        Customer.AddCustomer(customers);
                         break;
-                    case "A":
-                        Customer.AddAccountForCustomer(customers);
-                        break;
+                    //case "A":
+                    //    Customer.AddAccountForCustomer(customers);
+                    //    break;
                     case "Q":
-                        CustomerData.SaveCustomers(dataPath, idPath, customers, lastCustomerId);
+                        CustomerData.SaveCustomers(dataPath, customers);
                         running = false;
                         break;
                     default:
