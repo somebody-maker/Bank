@@ -7,9 +7,9 @@ class Customer
     public int Id { get; set; }
     public string Firstname { get; set; } = string.Empty;
     public string Lastname { get; set; } = string.Empty;
-    public int Age { get; set; }
+    public string Age { get; set; } = string.Empty;
     public string Adress { get; set; } = string.Empty;
-    public int Adressnumber { get; set; }
+    public string Adressnumber { get; set; } = string.Empty;
     public List<Account> Accounts { get; set; } = new List<Account>();
     public string Customerdata
     {
@@ -18,6 +18,16 @@ class Customer
             string accountsInfo = string.Join(", ", Accounts.Select(account => $"Konto: {account.AccountNumber} - Kontostand: {account.Balance}"));
             return String.Format("ID: {0} - Vorname: {1} - Nachname: {2} - Alter: {3} - Adresse: {4} - Hausnummer: {5} - Konten: {6}", this.Id, this.Firstname, this.Lastname, this.Age, this.Adress, this.Adressnumber, accountsInfo);
         }
+    }
+
+
+    //----------------------------------------------------------ADD ACCOUNT METHODE-----------------------------------------------------------------------------
+    public void AddAccount()
+    {
+        Account account = new Account();
+        account.AccountNumber = this.Id + RandomNumberGenerator.GetInt32(100, 10000);
+        account.Balance = RandomNumberGenerator.GetInt32(10000, 100000);
+        Accounts.Add(account);
     }
 
     //----------------------------------------------------------LIST CUSTOMER METHODE---------------------------------------------------------------------------
@@ -44,62 +54,50 @@ class Customer
         customer.Lastname = Console.ReadLine();
 
         Console.WriteLine("Alter des Kunden: ");
-        int age;
-        bool validAge = false;
-        while (!validAge)
-        {
-            if (int.TryParse(Console.ReadLine(), out age))
-            {
-                customer.Age = age;
-                validAge = true;
-            }
-            else
-            {
-                Console.WriteLine("Ungültige Eingabe, ich brauche eine Zahl.");
-            }
-        }
+        customer.Age = Console.ReadLine();
 
         Console.WriteLine("Straße des Kunden: ");
         customer.Adress = Console.ReadLine();
 
         Console.WriteLine("Hausnummer des Kunden: ");
-        int houseNumber;
-        bool validHouse = false;
-        while (!validHouse)
+        customer.Adressnumber = Console.ReadLine();
+
+        Console.WriteLine("Soll ein Konto hinzugefügt werden? y oder n");
+        var option = Console.ReadLine();
+        
+        if (option.ToLower() == "y") 
         {
-            if (int.TryParse(Console.ReadLine(), out houseNumber))
-            {
-                customer.Adressnumber = houseNumber;
-                validHouse = true;
-            }
-            else
-            {
-                Console.WriteLine("Ungültige Eingabe, ich brauche eine Zahl.");
-            }
+            customer.AddAccount();
+            Console.WriteLine("Es wurde ein Konto hinzugefügt.");
         }
+        else 
+        {
+            Console.WriteLine("Es wurde kein Konto hinzugefügt.");
+        }
+
         customers.Add(customer);
     }
 
 
     //----------------------------------------------------------ADD ACCOUNT METHODE---------------------------------------------------------------------------------
-    public static void AddAccountForCustomer(List<Customer> customers)
-    {
-        Console.WriteLine("ID des Kunden: ");
-        if (int.TryParse(Console.ReadLine(), out int customerId))
-        {
-            Customer? customer = customers.Find(c => c.Id == customerId);
-            if (customer != null)
-            {
-                Account account = new Account();
-                account.AccountNumber = RandomNumberGenerator.GetInt32(1, 200);
-                customer.Accounts.Add(account);
-                Console.WriteLine("Konto erfolgreich hinzugefügt.");
-            }
-            else
-            {
-                Console.WriteLine("Es gibt keinen Kunden mit der ID.");
-            }
-        }
-    }
+    //public static void AddAccountForCustomer(List<Customer> customers)
+    //{
+    //    Console.WriteLine("ID des Kunden: ");
+    //    if (int.TryParse(Console.ReadLine(), out int customerId))
+    //    {
+    //        Customer? customer = customers.Find(c => c.Id == customerId);
+    //        if (customer != null)
+    //        {
+    //            Account account = new Account();
+    //            account.AccountNumber = RandomNumberGenerator.GetInt32(1, 200);
+    //            customer.Accounts.Add(account);
+    //            Console.WriteLine("Konto erfolgreich hinzugefügt.");
+    //        }
+    //        else
+    //        {
+    //            Console.WriteLine("Es gibt keinen Kunden mit der ID.");
+    //        }
+    //    }
+    //}
 }
 
