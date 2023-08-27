@@ -44,9 +44,9 @@ class Customer
     public static void AddCustomer(List<Customer> customers)
     {
         Customer customer = new Customer();
-        if (customers > 0) 
+        if (customer.Id > 0) 
         {
-            var lastCustomerId = customer.Max(customer => customer.Id);
+            var lastCustomerId = customers.Max(customer => customer.Id);
             customer.Id = lastCustomerId + 1;
         }
         else 
@@ -70,9 +70,9 @@ class Customer
         customer.Adressnumber = Console.ReadLine();
 
         Console.WriteLine("Soll ein Konto hinzugefügt werden? y oder n");
-        var option = Console.ReadLine();
-        
-        if (option.ToLower() == "y") 
+        var option = Console.ReadLine()!;
+
+        if (option.ToLower() == "y")
         {
             customer.AddAccount();
             Console.WriteLine("Es wurde ein Konto hinzugefügt.");

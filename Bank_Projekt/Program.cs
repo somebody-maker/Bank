@@ -6,8 +6,6 @@ class Program
 {
     public static List<Customer> customers = new List<Customer>();
     public static string dataPath = "customers.json";
-    public static string idPath = "lastCustomerId.json";
-    public static int lastCustomerId = 0;
     static void Main(string[] args)
     {
         CustomerData.LoadCustomers(dataPath, ref customers);
