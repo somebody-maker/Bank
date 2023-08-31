@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using Microsoft.VisualBasic;
+using System.Security.Cryptography;
 using System.Text.Json;
 
 
@@ -6,6 +7,7 @@ class Program
 {
     public static List<Customer> customers = new List<Customer>();
     public static string dataPath = "customers.json";
+    public static int maxCustomerId;
     static void Main(string[] args)
     {
         CustomerData.LoadCustomers(dataPath, ref customers);
@@ -23,7 +25,7 @@ class Program
                         _ = args.Length - 1;
                         break;
                     case "add":
-                        Customer.AddCustomer(customers);
+                        Customer.AddCustomer(customers, maxCustomerId);
                         break;
                     case "quit":
                         running = false;
@@ -38,7 +40,8 @@ class Program
                 Console.WriteLine("Was möchtest du tun?");
                 Console.WriteLine("L - Liste aller Kunden");
                 Console.WriteLine("N - Hinzufügen eines Kunden");
-                Console.WriteLine("A - Hinzufügen eines Kundenkontos");
+                // Console.WriteLine("A - Hinzufügen eines Kundenkontos");
+                Console.WriteLine("T - Transfer von Guthaben");
                 Console.WriteLine("Q - Beenden");
 
                 string choice = Console.ReadLine().ToUpper();
@@ -49,7 +52,7 @@ class Program
                         Customer.ListCustomers(customers);
                         break;
                     case "N":
-                        Customer.AddCustomer(customers);
+                        Customer.AddCustomer(customers, maxCustomerId);
                         break;
                     //case "A":
                     //    Customer.AddAccountForCustomer(customers);
@@ -57,6 +60,9 @@ class Program
                     case "Q":
                         CustomerData.SaveCustomers(dataPath, customers);
                         running = false;
+                        break;
+                    case "T":
+                        Customer.TransferFunds(customers);
                         break;
                     default:
                         Console.WriteLine("Ungültige Auswahl.");

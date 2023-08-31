@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.IO;
 using System.Security.Cryptography;
 
@@ -41,18 +42,20 @@ class Customer
     }
 
     //----------------------------------------------------------ADD CUSTOMER METHODE---------------------------------------------------------------------------
-    public static void AddCustomer(List<Customer> customers)
+    public static void AddCustomer(List<Customer> customers, int maxCustomerId)
     {
         Customer customer = new Customer();
-        if (customer.Id > 0) 
+        if (customers.Count > 0)
         {
             var lastCustomerId = customers.Max(customer => customer.Id);
             customer.Id = lastCustomerId + 1;
+            maxCustomerId = customer.Id;
         }
         else 
         {
             customer.Id = 1;
-        }
+        }    
+       
 
         Console.WriteLine("Vorname des Kunden: ");
         customer.Firstname = Console.ReadLine();
@@ -70,7 +73,7 @@ class Customer
         customer.Adressnumber = Console.ReadLine();
 
         Console.WriteLine("Soll ein Konto hinzugefügt werden? y oder n");
-        var option = Console.ReadLine()!;
+        var option = Console.ReadLine();
 
         if (option.ToLower() == "y")
         {
@@ -86,25 +89,89 @@ class Customer
     }
 
 
-    //----------------------------------------------------------ADD ACCOUNT METHODE---------------------------------------------------------------------------------
-    //public static void AddAccountForCustomer(List<Customer> customers)
+    public static void ShowCustomerNamesAndIds(List<Customer> customers)
+    {
+        Console.WriteLine("Customer Names and IDs:");
+        foreach (var customer in customers)
+        {
+            Console.WriteLine($"  ID: {customer.Id}, Name: {customer.Firstname} {customer.Lastname}");
+        }
+    }
+
+
+    //------------------------------------------------------------------Transfer Funds Methode--------------------------------------
+
+    public static void TransferFunds(List<Customer> customers) 
+    {
+        ShowCustomerNamesAndIds(customers);
+
+        Console.WriteLine("Von welchem Konto möchten Sie überweisen? (ID eingeben): ");
+        int fromId = int.Parse(Console.ReadLine());
+
+        Console.WriteLine("Auf welches Konto möchten Sie überweisen? (ID eingeben): ");
+        int toId = int.Parse(Console.ReadLine());
+
+        Console.WriteLine("Bitte den Betrag eingeben: ");
+        float amount;
+        while (!float.TryParse(Console.ReadLine(), out amount))
+        {
+            Console.WriteLine("Ungültiger Betrag, bitte erneut eingeben");
+        }
+
+        Customer? fromCustomer = customers.FirstOrDefault(c => c.Id == fromId);
+        Customer? toCustomer = customers.FirstOrDefault(c => c.Id == toId);
+
+        if (fromCustomer != null && toCustomer != null)
+        {
+            var accountFrom = fromCustomer.Accounts.FirstOrDefault(account => account.Balance >= amount);
+            if (accountFrom != null)
+            {
+                accountFrom.Balance -= amount;
+                var accountTo = toCustomer.Accounts.FirstOrDefault();
+                if (accountTo != null)
+                {
+                    accountTo.Balance += amount;
+                    Console.WriteLine("Überweisung erfolgreich durchgeführt.");
+                }
+                else
+                {
+                    Console.WriteLine("Empfängerkonto nicht gefunden.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Nicht ausreichend Guthaben auf dem Senderkonto.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Kunden nicht gefunden.");
+        }
+
+    }
+}
+
+
+
+    //public static class ConsoleInputOutput
     //{
-    //    Console.WriteLine("ID des Kunden: ");
-    //    if (int.TryParse(Console.ReadLine(), out int customerId))
+    //    public static Customer SelectCustomer(List<Customer> customers)
     //    {
-    //        Customer? customer = customers.Find(c => c.Id == customerId);
-    //        if (customer != null)
+    //        ShowCustomerNamesAndIds(customers);
+    //        Console.WriteLine("Bitte gib die Id des Kunden an: ");
+    //        var idInput = Console.ReadLine()!;
+    //        if (!int.TryParse(idInput, out var id))
     //        {
-    //            Account account = new Account();
-    //            account.AccountNumber = RandomNumberGenerator.GetInt32(1, 200);
-    //            customer.Accounts.Add(account);
-    //            Console.WriteLine("Konto erfolgreich hinzugefügt.");
+    //            throw new Exception($"Ungültige Kundennummer: {idInput}");
     //        }
-    //        else
+
+    //        var customer = customers.Find(c => c.Id == id);
+    //        if (customer == null)
     //        {
-    //            Console.WriteLine("Es gibt keinen Kunden mit der ID.");
+    //            throw new Exception($"Kunde nicht gefunden");
     //        }
+
+    //        return customer;
     //    }
     //}
-}
 
