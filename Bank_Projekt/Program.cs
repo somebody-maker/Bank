@@ -40,7 +40,7 @@ class Program
                 Console.WriteLine("Was möchtest du tun?");
                 Console.WriteLine("L - Liste aller Kunden");
                 Console.WriteLine("N - Hinzufügen eines Kunden");
-                // Console.WriteLine("A - Hinzufügen eines Kundenkontos");
+                Console.WriteLine("A - Hinzufügen eines Kundenkontos");
                 Console.WriteLine("T - Transfer von Guthaben");
                 Console.WriteLine("Q - Beenden");
 
@@ -54,9 +54,9 @@ class Program
                     case "N":
                         Customer.AddCustomer(customers, maxCustomerId);
                         break;
-                    //case "A":
-                    //    Customer.AddAccountForCustomer(customers);
-                    //    break;
+                    case "A":
+                        Customer.AddAccounts(customers);
+                        break;
                     case "Q":
                         CustomerData.SaveCustomers(dataPath, customers);
                         running = false;

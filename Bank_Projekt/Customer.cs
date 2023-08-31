@@ -51,11 +51,11 @@ class Customer
             customer.Id = lastCustomerId + 1;
             maxCustomerId = customer.Id;
         }
-        else 
+        else
         {
             customer.Id = 1;
-        }    
-       
+        }
+
 
         Console.WriteLine("Vorname des Kunden: ");
         customer.Firstname = Console.ReadLine();
@@ -80,7 +80,7 @@ class Customer
             customer.AddAccount();
             Console.WriteLine("Es wurde ein Konto hinzugefügt.");
         }
-        else 
+        else
         {
             Console.WriteLine("Es wurde kein Konto hinzugefügt.");
         }
@@ -89,6 +89,7 @@ class Customer
     }
 
 
+    //----------------------------------------------------------SHOW ID`S + NAMES METHODE---------------------------------------------------------------------------
     public static void ShowCustomerNamesAndIds(List<Customer> customers)
     {
         Console.WriteLine("Customer Names and IDs:");
@@ -99,16 +100,20 @@ class Customer
     }
 
 
-    //------------------------------------------------------------------Transfer Funds Methode--------------------------------------
+    //----------------------------------------------------------TRANSFER FUNDS METHODE---------------------------------------------------------------------------
 
-    public static void TransferFunds(List<Customer> customers) 
+    public static void TransferFunds(List<Customer> customers)
     {
         ShowCustomerNamesAndIds(customers);
 
         Console.WriteLine("Von welchem Konto möchten Sie überweisen? (ID eingeben): ");
-        int fromId = int.Parse(Console.ReadLine());
+        int fromId;
+        if (!Int32.TryParse(Console.ReadLine(), out fromId))
+        {           
+            throw new Exception($"Ungültige Kundennummer: {idInput}");
+        }
 
-        Console.WriteLine("Auf welches Konto möchten Sie überweisen? (ID eingeben): ");
+            Console.WriteLine("Auf welches Konto möchten Sie überweisen? (ID eingeben): ");
         int toId = int.Parse(Console.ReadLine());
 
         Console.WriteLine("Bitte den Betrag eingeben: ");
@@ -135,7 +140,7 @@ class Customer
                 }
                 else
                 {
-                    Console.WriteLine("Empfängerkonto nicht gefunden.");
+                    Console.WriteLine("Empfängerkonto konnte nicht gefunden werden.");
                 }
             }
             else
@@ -145,10 +150,36 @@ class Customer
         }
         else
         {
-            Console.WriteLine("Kunden nicht gefunden.");
+            Console.WriteLine("Kunde konnte nicht gefunden werden.");
         }
 
     }
+
+
+    //----------------------------------------------------------ADD MORE ACCOUNTS METHODE---------------------------------------------------------------------------
+    public static void AddAccounts(List<Customer> customers)
+    {
+        ShowCustomerNamesAndIds(customers);
+
+        Console.WriteLine("ID für ein weiteres Konto: ");
+        var fromId = Console.ReadLine();
+        int id;
+        if (!Int32.TryParse(fromId, out id))
+        {
+            throw new Exception($"Ungültige ID: {fromId}");
+        }
+        Customer? fromCustomer = customers.FirstOrDefault(c => c.Id == id);
+
+            if (fromCustomer != null)
+            {
+                fromCustomer.AddAccount();
+                Console.WriteLine("Ein Konto wurde für den Kunden eröffnet.");
+            }
+            else
+            {
+                Console.WriteLine("ID existiert nicht.");
+            }
+    }  
 }
 
 

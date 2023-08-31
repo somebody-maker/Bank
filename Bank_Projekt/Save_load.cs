@@ -14,7 +14,7 @@ class CustomerData
 
 
     //----------------------------------------------------------LOAD CUSTOMERS METHODE---------------------------------------------------------------------------
-    public static List<Customer> LoadCustomers(string dataPath, ref List<Customer>? customers)
+    public static List<Customer> LoadCustomers(string dataPath, ref List<Customer> customers)
     {
         if (File.Exists(dataPath))
         {
