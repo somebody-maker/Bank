@@ -89,13 +89,35 @@ class Customer
     }
 
 
+    //----------------------------------------------------------DELEATE CUSTOMER METHODE---------------------------------------------------------------------------
+    public void DeleteCustomer(List<Customer> customers) 
+    {
+        ShowCustomerNamesAndIds(customers);
+        Console.WriteLine("ID zum Löschen eines Kunden: ");
+        int id;
+        if (!Int32.TryParse(Console.ReadLine(), out id)) 
+        {
+            throw new Exception($"Ungültige ID: {id}");
+        }
+        Customer? delCustomer = customers.FirstOrDefault(x => x.Id == id);
+        if (delCustomer != null) 
+        {
+            customers.Remove(delCustomer);
+            Console.WriteLine("Kunde erfolgreich gelöscht");
+        }
+        else
+        {
+            Console.WriteLine($"Kunde mit ID {id} existiert nicht");
+        }
+    }
+
     //----------------------------------------------------------SHOW ID`S + NAMES METHODE---------------------------------------------------------------------------
     public static void ShowCustomerNamesAndIds(List<Customer> customers)
     {
         Console.WriteLine("Customer Names and IDs:");
         foreach (var customer in customers)
         {
-            Console.WriteLine($"  ID: {customer.Id}, Name: {customer.Firstname} {customer.Lastname}");
+            Console.WriteLine($"ID: {customer.Id}, Name: {customer.Firstname} {customer.Lastname}");
         }
     }
 
@@ -110,11 +132,15 @@ class Customer
         int fromId;
         if (!Int32.TryParse(Console.ReadLine(), out fromId))
         {           
-            throw new Exception($"Ungültige Kundennummer: {idInput}");
+            throw new Exception($"Ungültige ID: {fromId}");
         }
 
-            Console.WriteLine("Auf welches Konto möchten Sie überweisen? (ID eingeben): ");
-        int toId = int.Parse(Console.ReadLine());
+        Console.WriteLine("Auf welches Konto möchten Sie überweisen? (ID eingeben): ");
+        int toId;
+        if (!Int32.TryParse(Console.ReadLine(), out toId))
+        {
+            throw new Exception($"Ungültige ID: {toId}");
+        }
 
         Console.WriteLine("Bitte den Betrag eingeben: ");
         float amount;

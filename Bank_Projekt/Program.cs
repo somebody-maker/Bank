@@ -42,6 +42,7 @@ class Program
                 Console.WriteLine("N - Hinzufügen eines Kunden");
                 Console.WriteLine("A - Hinzufügen eines Kundenkontos");
                 Console.WriteLine("T - Transfer von Guthaben");
+                Console.WriteLine("R - Löschen eines Kunden");
                 Console.WriteLine("Q - Beenden");
 
                 string choice = Console.ReadLine().ToUpper();
@@ -63,6 +64,9 @@ class Program
                         break;
                     case "T":
                         Customer.TransferFunds(customers);
+                        break;
+                    case "R":
+                        Customer.DeleteCustomer(customers);
                         break;
                     default:
                         Console.WriteLine("Ungültige Auswahl.");
