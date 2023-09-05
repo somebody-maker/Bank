@@ -2,6 +2,8 @@
 using System.ComponentModel.Design;
 using System.IO;
 using System.Security.Cryptography;
+using Serilog;
+using Serilog.Context;
 
 class Customer
 {
@@ -73,9 +75,9 @@ class Customer
         customer.Adressnumber = Console.ReadLine();
 
         Console.WriteLine("Soll ein Konto hinzugefügt werden? y oder n");
-        var option = Console.ReadLine();
+        string? option = Console.ReadLine();
 
-        if (option.ToLower() == "y")
+        if (option != null && option.ToLower() == "y")
         {
             customer.AddAccount();
             Console.WriteLine("Es wurde ein Konto hinzugefügt.");
@@ -85,22 +87,24 @@ class Customer
             Console.WriteLine("Es wurde kein Konto hinzugefügt.");
         }
 
+        Log.Information(customer.Customerdata);
+    
         customers.Add(customer);
     }
 
 
     //----------------------------------------------------------DELEATE CUSTOMER METHODE---------------------------------------------------------------------------
-    public static void DeleteCustomer(List<Customer> customers) 
+    public static void DeleteCustomer(List<Customer> customers)
     {
         ShowCustomerNamesAndIds(customers);
         Console.WriteLine("ID zum Löschen eines Kunden: ");
         int id;
-        if (!Int32.TryParse(Console.ReadLine(), out id)) 
+        if (!Int32.TryParse(Console.ReadLine(), out id))
         {
             throw new Exception($"Ungültige ID: {id}");
         }
         Customer? delCustomer = customers.FirstOrDefault(x => x.Id == id);
-        if (delCustomer != null) 
+        if (delCustomer != null)
         {
             customers.Remove(delCustomer);
             Console.WriteLine("Kunde erfolgreich gelöscht");
@@ -131,7 +135,7 @@ class Customer
         Console.WriteLine("Von welchem Konto möchten Sie überweisen? (ID eingeben): ");
         int fromId;
         if (!Int32.TryParse(Console.ReadLine(), out fromId))
-        {           
+        {
             throw new Exception($"Ungültige ID: {fromId}");
         }
 
@@ -152,33 +156,36 @@ class Customer
         Customer? fromCustomer = customers.FirstOrDefault(c => c.Id == fromId);
         Customer? toCustomer = customers.FirstOrDefault(c => c.Id == toId);
 
-        if (fromCustomer != null && toCustomer != null)
-        {
-            var accountFrom = fromCustomer.Accounts.FirstOrDefault(account => account.Balance >= amount);
-            if (accountFrom != null)
-            {
-                accountFrom.Balance -= amount;
-                var accountTo = toCustomer.Accounts.FirstOrDefault();
-                if (accountTo != null)
-                {
-                    accountTo.Balance += amount;
-                    Console.WriteLine("Überweisung erfolgreich durchgeführt.");
-                }
-                else
-                {
-                    Console.WriteLine("Empfängerkonto konnte nicht gefunden werden.");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Nicht ausreichend Guthaben auf dem Senderkonto.");
-            }
-        }
-        else
+        if (fromCustomer == null || toCustomer == null)
         {
             Console.WriteLine("Kunde konnte nicht gefunden werden.");
+            return;
         }
 
+        var accountFrom = fromCustomer.Accounts.FirstOrDefault(account => account.Balance >= amount);
+        if (accountFrom == null)
+        {
+            Console.WriteLine("Nicht ausreichend Guthaben auf dem Senderkonto.");
+            return;
+        }
+        {
+            accountFrom.Balance -= amount;
+            var transferLog = Log.ForContext("Level", "Transfer");
+            transferLog.Information(fromCustomer.Customerdata);
+            var accountTo = toCustomer.Accounts.FirstOrDefault();
+            if (accountTo == null)
+            {
+                Console.WriteLine("Empfängerkonto konnte nicht gefunden werden.");
+                return;
+            }
+            accountTo.Balance += amount;
+           
+            Log.Information(toCustomer.Customerdata);
+            
+            
+            Console.WriteLine("Überweisung erfolgreich durchgeführt.");
+
+        }
     }
 
 
@@ -196,39 +203,14 @@ class Customer
         }
         Customer? fromCustomer = customers.FirstOrDefault(c => c.Id == id);
 
-            if (fromCustomer != null)
-            {
-                fromCustomer.AddAccount();
-                Console.WriteLine("Ein Konto wurde für den Kunden eröffnet.");
-            }
-            else
-            {
-                Console.WriteLine("ID existiert nicht.");
-            }
-    }  
+        if (fromCustomer != null)
+        {
+            fromCustomer.AddAccount();
+            Console.WriteLine("Ein Konto wurde für den Kunden eröffnet.");
+        }
+        else
+        {
+            Console.WriteLine("ID existiert nicht.");
+        }
+    }
 }
-
-
-
-    //public static class ConsoleInputOutput
-    //{
-    //    public static Customer SelectCustomer(List<Customer> customers)
-    //    {
-    //        ShowCustomerNamesAndIds(customers);
-    //        Console.WriteLine("Bitte gib die Id des Kunden an: ");
-    //        var idInput = Console.ReadLine()!;
-    //        if (!int.TryParse(idInput, out var id))
-    //        {
-    //            throw new Exception($"Ungültige Kundennummer: {idInput}");
-    //        }
-
-    //        var customer = customers.Find(c => c.Id == id);
-    //        if (customer == null)
-    //        {
-    //            throw new Exception($"Kunde nicht gefunden");
-    //        }
-
-    //        return customer;
-    //    }
-    //}
-

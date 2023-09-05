@@ -1,6 +1,9 @@
 ﻿using Microsoft.VisualBasic;
 using System.Security.Cryptography;
 using System.Text.Json;
+using Serilog;
+using Serilog.Formatting.Json;
+using Serilog.Sinks.File;
 
 
 class Program
@@ -10,6 +13,10 @@ class Program
     public static int maxCustomerId;
     static void Main(string[] args)
     {
+        Log.Logger = new LoggerConfiguration()
+            .WriteTo.File(new JsonFormatter(), "eventlogs.ndjson")
+            .CreateLogger();
+
         CustomerData.LoadCustomers(dataPath, ref customers);
         bool running = true;
         while (running)
@@ -60,6 +67,7 @@ class Program
                         break;
                     case "Q":
                         CustomerData.SaveCustomers(dataPath, customers);
+                        Log.CloseAndFlush();
                         running = false;
                         break;
                     case "T":
