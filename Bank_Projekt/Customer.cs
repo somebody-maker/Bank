@@ -90,7 +90,7 @@ class Customer
 
 
     //----------------------------------------------------------DELEATE CUSTOMER METHODE---------------------------------------------------------------------------
-    public void DeleteCustomer(List<Customer> customers) 
+    public static void DeleteCustomer(List<Customer> customers) 
     {
         ShowCustomerNamesAndIds(customers);
         Console.WriteLine("ID zum Löschen eines Kunden: ");
