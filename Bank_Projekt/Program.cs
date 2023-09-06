@@ -14,7 +14,7 @@ class Program
     static void Main(string[] args)
     {
         Log.Logger = new LoggerConfiguration()
-            .WriteTo.File(new JsonFormatter(), "eventlogs.ndjson")
+            .WriteTo.File(new CustomJsonFormatter(), "eventlogs.ndjson")
             .CreateLogger();
 
         CustomerData.LoadCustomers(dataPath, ref customers);

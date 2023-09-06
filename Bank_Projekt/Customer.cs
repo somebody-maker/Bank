@@ -170,8 +170,6 @@ class Customer
         }
         {
             accountFrom.Balance -= amount;
-            var transferLog = Log.ForContext("Level", "Transfer");
-            transferLog.Information(fromCustomer.Customerdata);
             var accountTo = toCustomer.Accounts.FirstOrDefault();
             if (accountTo == null)
             {
@@ -179,13 +177,10 @@ class Customer
                 return;
             }
             accountTo.Balance += amount;
-           
-            Log.Information(toCustomer.Customerdata);
-            
-            
-            Console.WriteLine("Überweisung erfolgreich durchgeführt.");
 
+            Console.WriteLine("Überweisung erfolgreich durchgeführt.");
         }
+        Log.Information("Transfer from {0} to {1}", fromCustomer.Customerdata, toCustomer.Customerdata);
     }
 
 
