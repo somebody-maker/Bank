@@ -44,14 +44,13 @@ class Customer
     }
 
     //----------------------------------------------------------ADD CUSTOMER METHODE---------------------------------------------------------------------------
-    public static void AddCustomer(List<Customer> customers, int maxCustomerId)
+    public static void AddCustomer(List<Customer> customers)
     {
         Customer customer = new Customer();
         if (customers.Count > 0)
         {
             var lastCustomerId = customers.Max(customer => customer.Id);
             customer.Id = lastCustomerId + 1;
-            maxCustomerId = customer.Id;
         }
         else
         {
@@ -87,7 +86,7 @@ class Customer
             Console.WriteLine("Es wurde kein Konto hinzugefügt.");
         }
 
-        Log.Information(customer.Customerdata);
+        Log.Information("Kunde hinzugefügt: {0}",customer.Customerdata);
     
         customers.Add(customer);
     }
@@ -107,6 +106,7 @@ class Customer
         if (delCustomer != null)
         {
             customers.Remove(delCustomer);
+            Log.Information("Kunde wurde gelöscht: {0}", delCustomer.Customerdata);
             Console.WriteLine("Kunde erfolgreich gelöscht");
         }
         else
@@ -180,7 +180,8 @@ class Customer
 
             Console.WriteLine("Überweisung erfolgreich durchgeführt.");
         }
-        Log.Information("Transfer from {0} to {1}", fromCustomer.Customerdata, toCustomer.Customerdata);
+        Log.Information("ID: {0}, Name: {1} {2}, Auszahlung: - {3}", fromCustomer.Id, fromCustomer.Firstname, fromCustomer.Lastname, amount);
+        Log.Information("ID: {0}, Name: {1} {2}, Einzahlung: {3}", toCustomer.Id, toCustomer.Firstname, toCustomer.Lastname, amount);
     }
 
 
@@ -207,5 +208,6 @@ class Customer
         {
             Console.WriteLine("ID existiert nicht.");
         }
+        Log.Information("Konto wurde {0} hinzugefügt", fromCustomer.Customerdata);
     }
 }

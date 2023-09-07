@@ -10,11 +10,10 @@ class Program
 {
     public static List<Customer> customers = new List<Customer>();
     public static string dataPath = "customers.json";
-    public static int maxCustomerId;
     static void Main(string[] args)
     {
         Log.Logger = new LoggerConfiguration()
-            .WriteTo.File(new CustomJsonFormatter(), "eventlogs.ndjson")
+            .WriteTo.File("eventlogs.ndjson")
             .CreateLogger();
 
         CustomerData.LoadCustomers(dataPath, ref customers);
@@ -32,7 +31,7 @@ class Program
                         _ = args.Length - 1;
                         break;
                     case "add":
-                        Customer.AddCustomer(customers, maxCustomerId);
+                        Customer.AddCustomer(customers);
                         break;
                     case "quit":
                         running = false;
@@ -60,7 +59,7 @@ class Program
                         Customer.ListCustomers(customers);
                         break;
                     case "N":
-                        Customer.AddCustomer(customers, maxCustomerId);
+                        Customer.AddCustomer(customers);
                         break;
                     case "A":
                         Customer.AddAccounts(customers);
