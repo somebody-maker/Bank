@@ -4,16 +4,17 @@ using System.Text.Json;
 using Serilog;
 using Serilog.Formatting.Json;
 using Serilog.Sinks.File;
-
+using System;
 
 class Program
 {
     public static List<Customer> customers = new List<Customer>();
     public static string dataPath = "customers.json";
+    public static string scriptPath = "plt.py";
     static void Main(string[] args)
     {
         Log.Logger = new LoggerConfiguration()
-            .WriteTo.File("eventlogs.ndjson")
+            .WriteTo.File(new JsonFormatter(), "eventlogs.ndjson")
             .CreateLogger();
 
         CustomerData.LoadCustomers(dataPath, ref customers);
@@ -49,6 +50,7 @@ class Program
                 Console.WriteLine("A - Hinzufügen eines Kundenkontos");
                 Console.WriteLine("T - Transfer von Guthaben");
                 Console.WriteLine("R - Löschen eines Kunden");
+                Console.WriteLine("P - Kundenstatistik");
                 Console.WriteLine("Q - Beenden");
 
                 string choice = Console.ReadLine().ToUpper();
@@ -71,6 +73,9 @@ class Program
                         break;
                     case "T":
                         Customer.TransferFunds(customers);
+                        break;
+                    case "P":
+                        PythonScriptRunner.RunPythonScript(scriptPath, dataPath);
                         break;
                     case "R":
                         Customer.DeleteCustomer(customers);
