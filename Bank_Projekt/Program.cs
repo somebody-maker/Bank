@@ -10,7 +10,7 @@ class Program
 {
     public static List<Customer> customers = new List<Customer>();
     public static string dataPath = "customers.json";
-    public static string scriptPath = "plt.py";
+    public static string scriptPath = "C:\\Users\\OliverHannappel\\source\\repos\\Bank_Projekt\\Bank_Projekt\\plt.py";
     static void Main(string[] args)
     {
         Log.Logger = new LoggerConfiguration()

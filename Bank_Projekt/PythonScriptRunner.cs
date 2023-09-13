@@ -2,14 +2,14 @@
 
 class PythonScriptRunner
 {
-    public static void RunPythonScript(string scriptPath, string datapath)
+    public static void RunPythonScript(string scriptPath, string dataPath)
     {
         Process pythonProcess = new Process
         {
             StartInfo = new ProcessStartInfo
             {
                 FileName = "python",
-                Arguments = $"{scriptPath} \"{datapath}\"",
+                Arguments = $"{scriptPath} \"{dataPath}\"",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 CreateNoWindow = true
