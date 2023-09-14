@@ -10,7 +10,8 @@ class Program
 {
     public static List<Customer> customers = new List<Customer>();
     public static string dataPath = "customers.json";
-    public static string scriptPath = "C:\\Users\\OliverHannappel\\source\\repos\\Bank_Projekt\\Bank_Projekt\\plt.py";
+    public static string customerScriptPath = "C:\\Users\\OliverHannappel\\source\\repos\\Bank_Projekt\\Bank_Projekt\\plt.py";
+    public static string balanceScriptPath = "C:\\Users\\OliverHannappel\\source\\repos\\Bank_Projekt\\Bank_Projekt\\balance_data.py";
     static void Main(string[] args)
     {
         Log.Logger = new LoggerConfiguration()
@@ -51,6 +52,7 @@ class Program
                 Console.WriteLine("T - Transfer von Guthaben");
                 Console.WriteLine("R - Löschen eines Kunden");
                 Console.WriteLine("P - Kundenstatistik");
+                Console.WriteLine("B - Kontobewegungen");
                 Console.WriteLine("Q - Beenden");
 
                 string choice = Console.ReadLine().ToUpper();
@@ -75,7 +77,10 @@ class Program
                         Customer.TransferFunds(customers);
                         break;
                     case "P":
-                        PythonScriptRunner.RunPythonScript(scriptPath, dataPath);
+                        PythonScriptRunner.RunCustomerScript(customerScriptPath);
+                        break;
+                    case "B":
+                        PythonScriptRunner.RunBalanceScript(balanceScriptPath);
                         break;
                     case "R":
                         Customer.DeleteCustomer(customers);

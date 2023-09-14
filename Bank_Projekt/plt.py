@@ -35,6 +35,8 @@ if not add_customer_df.empty:
 
     max_objects = len(add_customer_df)
 
+    # print(add_customer_df['CustomerInfo'])
+
     # Plot a bar chart of the number of customers added over time
     plt.figure(figsize=(12, 6))
     add_customer_df['Timestamp'].dt.date.value_counts().sort_index().plot(kind='bar')
